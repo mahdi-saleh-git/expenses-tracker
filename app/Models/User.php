@@ -29,7 +29,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        // 'password',
         'remember_token',
     ];
 
@@ -44,5 +44,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function expenses(): HasMany {
+
+        return $this->hasMany(Expenses::class);
     }
 }

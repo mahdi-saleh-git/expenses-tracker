@@ -42,33 +42,54 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        Auth::login($user);
+        $request->session()->put('user_id', $user->id);
+        $request->session()->regenerate();
 
-        return redirect()->route('expenses.index'); // main page
+        return redirect()->route('user.expenses.index', ['user' => $user]); // main page
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        
+        $user = User::findOrFail(session('user_id'));
+
+        return view('user.details', ['user' => $user]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $userid)
     {
-        //
+        $user = User::findOrFail($userid);
+
+        return view('user.edit', ['user' => $user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $register)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|confirmed|min:6', // make password optional
+        ]);
+    
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $register->update($data);
+
+        return redirect()->route('register.show', ['register' => $register->id])
+                ->with('success', 'Profile Updated');
+
     }
 
     /**

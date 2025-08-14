@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -30,18 +29,22 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            // Regenerate session for security
+        $user = User::where('email', $request->email)->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+
+            $request->session()->put('user_id', $user->id);
             $request->session()->regenerate();
-            return redirect()->route('expenses.index'); // dashboard/main page
+
+            return redirect()->route('user.expenses.index', ['user' => $user->id]); // main page
         }
 
-        return back()->withErrors(['login' => 'Email or password incorrect']);
+        return back()->withErrors(['login' => 'Email or password is incorrect']);
     }
 
     /**
@@ -78,9 +81,8 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout(); // logout user
-
         // Invalidate session & regenerate token for security
+        $request->session()->forget('user_id');
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
