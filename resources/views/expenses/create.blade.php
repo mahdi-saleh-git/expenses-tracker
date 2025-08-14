@@ -42,7 +42,7 @@
             </div>
 
             @php
-            $categories = ['shopping', 'medical', 'entertainment']; // Expand as needed
+            $categories = ['shopping', 'medical', 'entertainment', 'food', 'transport', 'bills']; // Expand as needed
             @endphp
 
             <div>

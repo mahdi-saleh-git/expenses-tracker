@@ -49,7 +49,7 @@
         </div>
 
         @php
-            $categories = ['shopping', 'medical', 'entertainment'];
+            $categories = ['shopping', 'medical', 'entertainment', 'food', 'transport', 'bills'];
         @endphp
 
         <div>

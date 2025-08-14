@@ -23,4 +23,7 @@ Route::resource('register', RegisterController::class)
 Route::resource('user.expenses', ExpensesController::class)
     ->scoped();
 
+Route::get('/expenses/report', [ExpensesController::class, 'report'])
+    ->name('expenses.report');
+
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');

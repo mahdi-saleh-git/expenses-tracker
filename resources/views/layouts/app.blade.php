@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'My App')</title>
+    <title>@yield('title', 'Expenses Tracker')</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style type="text/tailwindcss">
@@ -37,20 +37,14 @@
 </head>
 <body class="bg-gray-100 min-h-screen p-4 space-y-3">
 
-    {{-- <div class="w-full h-full bg-white rounded-xl shadow-lg p-8 max-w-full mx-auto"> --}}
-        {{-- <h1 class="text-2xl font-semibold text-gray-800 mb-6">@yield('title', 'My App')</h1> --}}
-        {{-- <div class="space-y-4 h-full overflow-auto">
-            @yield('content')
-        </div>
-    </div> --}}
-
-    <!-- Navigation Bar -->
     <nav class="bg-blue-50 shadow rounded-xl">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1>Daily Expenses App</h1>
+        <div class="container mx-auto px-4 py-5 flex justify-between items-center">
+            <h1> Hi, {{ $globalUser->name ?? 'Guest' }} ! Track Your Money Expensed</h1>
             
             <div class="space-x-4">
                 @if(session('user_id'))
+                    <a href="{{ route('user.expenses.index', ['user' => session('user_id')]) }}" class="url hover:bg-gray-200">Expenses</a>
+                    <a href="{{ route('expenses.report', ['type' => 'monthly']) }}" class="url hover:bg-gray-200">Report</a>
                     <a href="{{ route('register.show', ['register' => session('user_id')]) }}" class="url hover:text-blue-500">Profile</a>
                     <a href="{{ route('logout') }}"
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -67,13 +61,8 @@
         </div>
     </nav>
 
-    {{-- <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
-        @yield('content')
-    </main> --}}
 
      <div class="w-full h-full bg-white rounded-xl shadow-lg p-8 max-w-full mx-auto">
-        {{-- <h1 class="text-2xl font-semibold text-gray-800 mb-6">@yield('title', 'My App')</h1> --}}
         <div class="space-y-4 h-full overflow-auto">
             @yield('content')
         </div>
